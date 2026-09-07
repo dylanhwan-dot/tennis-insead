@@ -45,13 +45,15 @@ create table availability (
 -- the dashboard Table Editor) don't get this automatically, so it's
 -- explicit here.
 
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role;
 
 grant select on profiles to anon, authenticated;
 grant insert, update on profiles to authenticated;
+grant select, insert, update, delete on profiles to service_role;
 
 grant select on availability to anon, authenticated;
 grant insert, update, delete on availability to authenticated;
+grant select, insert, update, delete on availability to service_role;
 
 -- ── Row Level Security ──────────────────────────────────────────────────
 
