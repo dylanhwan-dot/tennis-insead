@@ -40,6 +40,7 @@ export default async function HomePage() {
       <DirectoryClient
         profiles={visibleProfiles}
         availability={availability ?? []}
+        isAuthenticated={isAuthenticated}
       />
     </main>
   );

@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   CAMPUSES,
   DAYS_OF_WEEK,
-  INTENSITIES,
   SKILL_TIERS,
   TIME_BLOCKS,
 } from "@/lib/constants";
@@ -12,7 +12,6 @@ import type {
   AvailabilityRow,
   Campus,
   DayOfWeek,
-  Intensity,
   ProfileRow,
   SkillTier,
   TimeBlock,
@@ -21,16 +20,30 @@ import type {
 type Props = {
   profiles: ProfileRow[];
   availability: AvailabilityRow[];
+  isAuthenticated: boolean;
 };
 
 const ANY = "Any";
 
-export default function DirectoryClient({ profiles, availability }: Props) {
+export default function DirectoryClient({
+  profiles,
+  availability,
+  isAuthenticated,
+}: Props) {
   const [campus, setCampus] = useState<Campus | typeof ANY>(ANY);
   const [skillTier, setSkillTier] = useState<SkillTier | typeof ANY>(ANY);
-  const [intensity, setIntensity] = useState<Intensity | typeof ANY>(ANY);
   const [day, setDay] = useState<DayOfWeek | typeof ANY>(ANY);
   const [timeBlock, setTimeBlock] = useState<TimeBlock | typeof ANY>(ANY);
+
+  const hasActiveFilters =
+    campus !== ANY || skillTier !== ANY || day !== ANY || timeBlock !== ANY;
+
+  function clearFilters() {
+    setCampus(ANY);
+    setSkillTier(ANY);
+    setDay(ANY);
+    setTimeBlock(ANY);
+  }
 
   const availabilityByUser = useMemo(() => {
     const map = new Map<string, AvailabilityRow[]>();
@@ -45,7 +58,6 @@ export default function DirectoryClient({ profiles, availability }: Props) {
   const filtered = profiles.filter((p) => {
     if (campus !== ANY && p.campus !== campus) return false;
     if (skillTier !== ANY && p.skill_tier !== skillTier) return false;
-    if (intensity !== ANY && p.intensity !== intensity) return false;
 
     if (day !== ANY || timeBlock !== ANY) {
       const slots = availabilityByUser.get(p.id) ?? [];
@@ -62,33 +74,42 @@ export default function DirectoryClient({ profiles, availability }: Props) {
 
   return (
     <>
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
-        <Select
-          label="Campus"
-          value={campus}
-          onChange={setCampus}
-          options={CAMPUSES}
-        />
-        <Select
-          label="Skill tier"
-          value={skillTier}
-          onChange={setSkillTier}
-          options={SKILL_TIERS}
-        />
-        <Select
-          label="Intensity"
-          value={intensity}
-          onChange={setIntensity}
-          options={INTENSITIES}
-        />
-        <Select label="Day" value={day} onChange={setDay} options={DAYS_OF_WEEK} />
-        <Select
-          label="Time"
-          value={timeBlock}
-          onChange={setTimeBlock}
-          options={TIME_BLOCKS}
-          capitalize
-        />
+      <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+        <div className="grid grow grid-cols-2 gap-3 sm:grid-cols-4">
+          <Select
+            label="Campus"
+            value={campus}
+            onChange={setCampus}
+            options={CAMPUSES}
+          />
+          <Select
+            label="Skill tier"
+            value={skillTier}
+            onChange={setSkillTier}
+            options={SKILL_TIERS}
+          />
+          <Select
+            label="Day"
+            value={day}
+            onChange={setDay}
+            options={DAYS_OF_WEEK}
+          />
+          <Select
+            label="Time"
+            value={timeBlock}
+            onChange={setTimeBlock}
+            options={TIME_BLOCKS}
+            capitalize
+          />
+        </div>
+        <button
+          type="button"
+          onClick={clearFilters}
+          disabled={!hasActiveFilters}
+          className="shrink-0 rounded-md border border-neutral-300 px-3 py-2 text-xs font-medium text-neutral-600 hover:border-neutral-400 hover:text-neutral-900 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          Clear all filters
+        </button>
       </div>
 
       <p className="mt-4 text-xs text-neutral-400">
@@ -136,6 +157,8 @@ export default function DirectoryClient({ profiles, availability }: Props) {
                 WhatsApp: {p.whatsapp}
               </p>
             )}
+
+            <ConnectButton profile={p} isAuthenticated={isAuthenticated} />
           </li>
         ))}
       </ul>
@@ -146,6 +169,40 @@ export default function DirectoryClient({ profiles, availability }: Props) {
         </p>
       )}
     </>
+  );
+}
+
+function ConnectButton({
+  profile,
+  isAuthenticated,
+}: {
+  profile: ProfileRow;
+  isAuthenticated: boolean;
+}) {
+  const buttonClass =
+    "mt-3 inline-block w-fit rounded-md bg-neutral-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-neutral-800";
+
+  if (!isAuthenticated) {
+    return (
+      <Link href="/login" className={buttonClass}>
+        Connect
+      </Link>
+    );
+  }
+
+  const href = profile.whatsapp
+    ? `https://wa.me/${profile.whatsapp.replace(/\D/g, "")}`
+    : `mailto:${profile.email}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={buttonClass}
+    >
+      Connect
+    </a>
   );
 }
 
