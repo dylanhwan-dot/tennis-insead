@@ -16,7 +16,7 @@ export default function LoginPage() {
 
     if (!trimmed.endsWith("@insead.edu")) {
       setStatus("error");
-      setErrorMessage("Please use your @insead.edu email address.");
+      setErrorMessage("Needs to be an @insead.edu address.");
       return;
     }
 
@@ -37,17 +37,15 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center px-6 py-16">
-      <h1 className="text-2xl font-semibold text-neutral-900">
-        Sign in to Tennis @INSEAD
-      </h1>
+      <h1 className="text-2xl font-semibold text-neutral-900">Sign in</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Open to current INSEAD MIM and MBA students. Use your @insead.edu
-        email to get a magic link.
+        For INSEAD MIM and MBA students. Pop in your @insead.edu email and
+        we&apos;ll send you a link to sign in.
       </p>
 
       {status === "sent" ? (
         <p className="mt-6 rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          Check your inbox at <strong>{email}</strong> for a sign-in link.
+          Link sent to <strong>{email}</strong> - check your inbox.
         </p>
       ) : (
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-3">

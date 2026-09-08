@@ -14,9 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tennis @INSEAD",
+  title: "INSEAD Advantage",
   description:
     "Find tennis partners at your level across the INSEAD Fontainebleau and Singapore campuses.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -32,10 +32,10 @@ export default async function HomePage() {
 
   return (
     <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-10">
-      <h1 className="text-2xl font-semibold">Find a tennis partner</h1>
+      <h1 className="text-2xl font-semibold">Find someone to play with</h1>
       <p className="mt-1 text-sm text-neutral-500">
-        Browse INSEAD students across Fontainebleau and Singapore. Sign in
-        to add yourself to the directory.
+        Doesn&apos;t matter whether you&apos;re MIM, MBA, Fontainebleau,
+        Singapore: see who&apos;s around and when. Sign in to add yourself.
       </p>
       <DirectoryClient
         profiles={visibleProfiles}

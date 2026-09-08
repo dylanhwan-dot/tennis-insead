@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import SignOutButton from "./SignOutButton";
@@ -11,8 +12,14 @@ export default async function Nav() {
   return (
     <header className="border-b border-neutral-200">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-semibold text-neutral-900">
-          Tennis @INSEAD
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo-header.svg"
+            alt="INSEAD Advantage"
+            width={282}
+            height={48}
+            className="h-10 w-auto"
+          />
         </Link>
         <nav className="flex items-center gap-4">
           {user ? (
