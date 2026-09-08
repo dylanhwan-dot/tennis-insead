@@ -65,7 +65,7 @@ export default function LoginPage() {
             disabled={status === "sending"}
             className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            {status === "sending" ? "Sending link…" : "Send magic link"}
+            {status === "sending" ? "Sending link…" : "Send me the sign-in link"}
           </button>
         </form>
       )}
